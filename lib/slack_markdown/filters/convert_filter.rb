@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'html/pipeline'
-require 'escape_utils'
 
 module SlackMarkdown
   module Filters
@@ -54,13 +53,13 @@ module SlackMarkdown
         if link
           escaped_link =
             if context[:cushion_link] && link.match(%r{\A([A-Za-z0-9]+:)?//})
-              "#{EscapeUtils.escape_html context[:cushion_link]}#{EscapeUtils.escape_url link}"
+              "#{CGI.escapeHTML context[:cushion_link]}#{CGI.escape link}"
             else
-              EscapeUtils.escape_html(link).to_s
+              CGI.escapeHTML(link).to_s
             end
-          "<a href=\"#{escaped_link}\" class=\"#{EscapeUtils.escape_html(klass)}\">#{EscapeUtils.escape_html(override_text || text)}</a>"
+          "<a href=\"#{escaped_link}\" class=\"#{CGI.escapeHTML(klass)}\">#{CGI.escapeHTML(override_text || text)}</a>"
         else
-          EscapeUtils.escape_html(override_text || text)
+          CGI.escapeHTML(override_text || text)
         end
       end
     end
